@@ -1,0 +1,1 @@
+This project is a Next.js application built with React, Radix UI, and Tailwind CSS. It uses TypeScript for type safety and pnpm as the package manager.

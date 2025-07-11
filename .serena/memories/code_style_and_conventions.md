@@ -1,0 +1,1 @@
+This project follows standard TypeScript conventions. It uses Prettier and ESLint for formatting and linting. The code uses type hints and JSDoc-style comments. Tailwind CSS is used for styling, with CSS variables for theme customization.

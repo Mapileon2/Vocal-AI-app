@@ -1,0 +1,1 @@
+I have added the Serena MCP server to the `mcp_settings.json` file and created memory files with information about the project. This completes the onboarding task.

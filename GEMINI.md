@@ -1,0 +1,1 @@
+export GEMINI_API_KEY="AIzaSyCHYjTzacegc3SpOpa8zOf5bEfQH3VKilc"
