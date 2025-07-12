@@ -4,7 +4,7 @@ const AccentScenes = () => {
   return (
     <div>
       <h2>Accent Scenes & Challenges</h2>
-      <p>This section is under development.</p>
+      <p>Accent Scenes & Challenges - This section is under development.</p>
     </div>
   );
 };

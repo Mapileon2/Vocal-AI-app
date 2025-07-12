@@ -4,7 +4,7 @@ const RealTimeEvaluation = () => {
   return (
     <div>
       <h2>Real-Time Accent Evaluation</h2>
-      <p>This section is under development.</p>
+      <p>Real-Time Accent Evaluation - This section is under development.</p>
     </div>
   );
 };

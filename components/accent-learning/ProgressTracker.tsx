@@ -4,7 +4,7 @@ const ProgressTracker = () => {
   return (
     <div>
       <h2>Progress Tracker</h2>
-      <p>This section is under development.</p>
+      <p>Progress Tracker - This section is under development.</p>
     </div>
   );
 };

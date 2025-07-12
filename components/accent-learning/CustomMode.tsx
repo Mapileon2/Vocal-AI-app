@@ -4,7 +4,7 @@ const CustomMode = () => {
   return (
     <div>
       <h2>Custom Mode</h2>
-      <p>This section is under development.</p>
+      <p>Custom Mode - This section is under development.</p>
     </div>
   );
 };
