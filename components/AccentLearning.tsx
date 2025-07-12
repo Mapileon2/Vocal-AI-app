@@ -17,6 +17,7 @@ const lessons = [
 
 const AccentLearning = () => {
   const [selectedAccent, setSelectedAccent] = useState<string | null>(null);
+    const [detectedAccent, setDetectedAccent] = useState<string | null>(null);
 
   const handleAccentClick = (accent: string) => {
     setSelectedAccent(accent);
@@ -25,7 +26,15 @@ const AccentLearning = () => {
   const handleRecordAndAnalyze = async () => {
     // TODO: Implement audio recording and analysis logic here
     console.log("Recording and analyzing audio...");
+    const detected = await detectAccent();
+    setDetectedAccent(detected);
   };
+
+    const detectAccent = async () => {
+        const accents = ["North American English", "British English", "Australian English", "Indian English"];
+        const randomIndex = Math.floor(Math.random() * accents.length);
+        return accents[randomIndex];
+    }
 
     const handleStartLesson = (lessonId: string) => {
         // TODO: Implement lesson start logic
@@ -46,6 +55,7 @@ const AccentLearning = () => {
         </div>
         {selectedAccent && <p>You have selected: {selectedAccent}</p>}
         <button onClick={handleRecordAndAnalyze}>Record and Analyze</button>
+            {detectedAccent && <p>Detected Accent: {detectedAccent}</p>}
       </CardContent>
     </Card>
   );
