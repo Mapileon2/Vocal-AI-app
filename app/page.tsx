@@ -56,7 +56,7 @@ export default function Dashboard() {
   const quickStats = [
     { label: "Clarity Score", value: `${progress?.clarityScore || 0}%`, change: "+12%", icon: Target },
     { label: "Avg. Pitch", value: `${progress?.avgPitch || 165} Hz`, change: "+5 Hz", icon: TrendingUp },
-    { label: "Sessions", value: (progress?.totalSessions || 0).toString(), change: "+3", icon: Calendar },
+    { label: "Sessions", value: `${progress?.totalSessions || 0}`, change: "+3", icon: Calendar },
     { label: "Streak", value: `${progress?.streak || 0} days`, change: "Active", icon: Zap },
   ]
 
@@ -241,3 +241,8 @@ export default function Dashboard() {
               </CardContent>
             </Card>
           </div>
+        </div>
+      </div>
+    </div>
+  )
+}
