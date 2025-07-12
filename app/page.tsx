@@ -15,10 +15,8 @@ import {
   Calendar,
   Zap,
   Key,
-import { AccentLearning } from "@/components/AccentLearning";
   AlertCircle,
   RefreshCw,
-import { Target } from "lucide-react";
 } from "lucide-react"
 import AccentLearning from "@/components/AccentLearning";
 import Link from "next/link"
@@ -237,91 +235,9 @@ export default function Dashboard() {
                         )}
                       </CardContent>
                     </Card>
-import { Target } from "lucide-react";
-<AccentLearning />
                   </Link>
-<Link href="/accent-learning">
-                    <Card className="cursor-pointer hover:shadow-md transition-shadow border-2 hover:border-blue-200">
-                      <CardContent className="p-6 text-center">
-                        <Target className="w-12 h-12 text-orange-600 mx-auto mb-3" />
-                        <h3 className="font-semibold mb-2">Accent Learning</h3>
-                        <p className="text-sm text-gray-600">Learn and improve your accent</p>
-                      </CardContent>
-                    </Card>
-                  </Link>
+                  <AccentLearning />
                 </div>
               </CardContent>
             </Card>
           </div>
-
-          {/* Progress & Gamification */}
-          <div className="space-y-6">
-            {/* Weekly Goal */}
-            <Card>
-              <CardHeader>
-                <CardTitle className="text-lg">Weekly Goal</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-3">
-                  <div className="flex justify-between text-sm">
-                    <span>Sessions this week</span>
-                    <span>
-                      {progress?.weekSessions || 0}/{progress?.weeklyGoal || 5}
-                    </span>
-                  </div>
-                  <Progress
-                    value={((progress?.weekSessions || 0) / (progress?.weeklyGoal || 5)) * 100}
-                    className="h-2"
-                  />
-                  <p className="text-xs text-gray-600">
-                    {Math.max(0, (progress?.weeklyGoal || 5) - (progress?.weekSessions || 0))} more sessions to reach
-                    your goal
-                  </p>
-                </div>
-              </CardContent>
-            </Card>
-
-            {/* Badges */}
-            <Card>
-              <CardHeader>
-                <CardTitle className="text-lg">Achievements</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="grid grid-cols-2 gap-3">
-                  {recentBadges.map((badge, index) => (
-                    <div
-                      key={index}
-                      className={`p-3 rounded-lg border text-center ${
-                        badge.earned ? "bg-blue-50 border-blue-200" : "bg-gray-50 border-gray-200 opacity-60"
-                      }`}
-                    >
-                      <div className="text-2xl mb-1">{badge.icon}</div>
-                      <p className="text-xs font-medium">{badge.name}</p>
-                    </div>
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
-
-            {/* Recent Activity */}
-            <Card>
-              <CardHeader>
-                <CardTitle className="text-lg">Recent Activity</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-3 text-sm">
-                  {progress?.recentActivity?.map((activity, index) => (
-                    <div key={index} className="flex items-center gap-3">
-                      <div className={`w-2 h-2 ${activity.color} rounded-full`}></div>
-                      <span>{activity.text}</span>
-                    </div>
-                  )) || <div className="text-gray-500 text-center py-4">No recent activity</div>}
-                </div>
-              </CardContent>
-            </Card>
-          </div>
-        </div>
-      </div>
-    </div>
-  )
-}
