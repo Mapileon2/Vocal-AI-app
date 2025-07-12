@@ -10,6 +10,11 @@ const accentOptions = [
   { name: "Indian Neutral", flag: "🇮🇳", audio: "" },
 ];
 
+const lessons = [
+    { lesson_id: "american_1", accent_target: "American", prompts: [{ type: "word", text: "schedule", audio_native: "", correct_phoneme: "/skedjuːl/", dictionary_lookup: true }] },
+    { lesson_id: "british_1", accent_target: "British RP", prompts: [{ type: "word", text: "schedule", audio_native: "", correct_phoneme: "/\u0283\u025bdju\u02d0l/", dictionary_lookup: true }] },
+];
+
 const AccentLearning = () => {
   const [selectedAccent, setSelectedAccent] = useState<string | null>(null);
 
@@ -21,6 +26,11 @@ const AccentLearning = () => {
     // TODO: Implement audio recording and analysis logic here
     console.log("Recording and analyzing audio...");
   };
+
+    const handleStartLesson = (lessonId: string) => {
+        // TODO: Implement lesson start logic
+        console.log("Starting lesson:", lessonId);
+    };
 
   return (
     <Card className="cursor-pointer hover:shadow-md transition-shadow border-2 hover:border-blue-200">
