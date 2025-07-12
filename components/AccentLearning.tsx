@@ -45,7 +45,17 @@ const AccentLearning = () => {
     console.log("Recording and analyzing audio...");
     const detected = await detectAccent();
     setDetectedAccent(detected);
+    if (selectedAccent && currentLesson) {
+        const evaluation = await evaluatePronunciation(selectedAccent, currentLesson.prompts[0].text);
+        console.log("Pronunciation Evaluation:", evaluation);
+    }
   };
+
+    const evaluatePronunciation = async (accent: string, text: string) => {
+        // TODO: Implement real-time accent evaluation logic here
+        console.log("Evaluating pronunciation...");
+        return { score: Math.random() * 100, feedback: "Good job!" };
+    }
 
     const detectAccent = async () => {
         const accents = ["North American English", "British English", "Australian English", "Indian English"];
