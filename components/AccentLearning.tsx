@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Card, CardContent } from "@/components/ui/card";
 import { Target } from "lucide-react";
 
@@ -10,7 +10,17 @@ const accentOptions = [
   { name: "Indian Neutral", flag: "🇮🇳", audio: "" },
 ];
 
-const lessons = {
+interface Lesson {
+    lesson_id: string;
+    accent_target: string;
+    prompts: { type: string; text: string; audio_native: string; correct_phoneme: string; dictionary_lookup: boolean; }[];
+}
+
+interface Lessons {
+    [key: string]: Lesson[];
+}
+
+const lessons: Lessons = {
     "American": [
         { lesson_id: "american_1", accent_target: "American", prompts: [{ type: "word", text: "schedule", audio_native: "", correct_phoneme: "/skedjuːl/", dictionary_lookup: true }] },
         { lesson_id: "american_2", accent_target: "American", prompts: [{ type: "phrase", text: "How are you?", audio_native: "", correct_phoneme: "", dictionary_lookup: false }] },
@@ -24,6 +34,7 @@ const lessons = {
 const AccentLearning = () => {
   const [selectedAccent, setSelectedAccent] = useState<string | null>(null);
     const [detectedAccent, setDetectedAccent] = useState<string | null>(null);
+    const [currentLesson, setCurrentLesson] = useState<Lesson | null>(null);
 
   const handleAccentClick = (accent: string) => {
     setSelectedAccent(accent);
@@ -45,6 +56,10 @@ const AccentLearning = () => {
     const handleStartLesson = (lessonId: string) => {
         // TODO: Implement lesson start logic
         console.log("Starting lesson:", lessonId);
+        const lesson = lessons[selectedAccent!].find((lesson) => lesson.lesson_id === lessonId);
+        if (lesson) {
+            setCurrentLesson(lesson);
+        }
     };
 
   return (
@@ -62,6 +77,20 @@ const AccentLearning = () => {
         {selectedAccent && <p>You have selected: {selectedAccent}</p>}
         <button onClick={handleRecordAndAnalyze}>Record and Analyze</button>
             {detectedAccent && <p>Detected Accent: {detectedAccent}</p>}
+        {selectedAccent && (
+            <div>
+                <h2>Lessons</h2>
+                <ul>
+                    {lessons[selectedAccent]?.map((lesson) => (
+                        <li key={lesson.lesson_id}>
+                            <button onClick={() => handleStartLesson(lesson.lesson_id)}>
+                                {lesson.lesson_id}
+                            </button>
+                        </li>
+                    ))}
+                </ul>
+            </div>
+        )}
       </CardContent>
     </Card>
   );
