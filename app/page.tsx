@@ -15,9 +15,12 @@ import {
   Calendar,
   Zap,
   Key,
+import { AccentLearning } from "@/components/AccentLearning";
   AlertCircle,
   RefreshCw,
+import { Target } from "lucide-react";
 } from "lucide-react"
+import AccentLearning from "@/components/AccentLearning";
 import Link from "next/link"
 import { useUserProgress } from "@/hooks/use-user-progress"
 import { useApiKey } from "@/hooks/use-api-key"
@@ -232,6 +235,17 @@ export default function Dashboard() {
                             AI Powered
                           </Badge>
                         )}
+                      </CardContent>
+                    </Card>
+import { Target } from "lucide-react";
+<AccentLearning />
+                  </Link>
+<Link href="/accent-learning">
+                    <Card className="cursor-pointer hover:shadow-md transition-shadow border-2 hover:border-blue-200">
+                      <CardContent className="p-6 text-center">
+                        <Target className="w-12 h-12 text-orange-600 mx-auto mb-3" />
+                        <h3 className="font-semibold mb-2">Accent Learning</h3>
+                        <p className="text-sm text-gray-600">Learn and improve your accent</p>
                       </CardContent>
                     </Card>
                   </Link>
