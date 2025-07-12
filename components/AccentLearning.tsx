@@ -10,10 +10,16 @@ const accentOptions = [
   { name: "Indian Neutral", flag: "🇮🇳", audio: "" },
 ];
 
-const lessons = [
-    { lesson_id: "american_1", accent_target: "American", prompts: [{ type: "word", text: "schedule", audio_native: "", correct_phoneme: "/skedjuːl/", dictionary_lookup: true }] },
-    { lesson_id: "british_1", accent_target: "British RP", prompts: [{ type: "word", text: "schedule", audio_native: "", correct_phoneme: "/\u0283\u025bdju\u02d0l/", dictionary_lookup: true }] },
-];
+const lessons = {
+    "American": [
+        { lesson_id: "american_1", accent_target: "American", prompts: [{ type: "word", text: "schedule", audio_native: "", correct_phoneme: "/skedjuːl/", dictionary_lookup: true }] },
+        { lesson_id: "american_2", accent_target: "American", prompts: [{ type: "phrase", text: "How are you?", audio_native: "", correct_phoneme: "", dictionary_lookup: false }] },
+    ],
+    "British RP": [
+        { lesson_id: "british_1", accent_target: "British RP", prompts: [{ type: "word", text: "schedule", audio_native: "", correct_phoneme: "/\u0283\u025bdju\u02d0l/", dictionary_lookup: true }] },
+        { lesson_id: "british_2", accent_target: "British RP", prompts: [{ type: "phrase", text: "How do you do?", audio_native: "", correct_phoneme: "", dictionary_lookup: false }] },
+    ]
+};
 
 const AccentLearning = () => {
   const [selectedAccent, setSelectedAccent] = useState<string | null>(null);
