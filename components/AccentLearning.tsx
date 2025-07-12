@@ -17,6 +17,11 @@ const AccentLearning = () => {
     setSelectedAccent(accent);
   };
 
+  const handleRecordAndAnalyze = async () => {
+    // TODO: Implement audio recording and analysis logic here
+    console.log("Recording and analyzing audio...");
+  };
+
   return (
     <Card className="cursor-pointer hover:shadow-md transition-shadow border-2 hover:border-blue-200">
       <CardContent className="p-6 text-center">
@@ -30,6 +35,7 @@ const AccentLearning = () => {
           ))}
         </div>
         {selectedAccent && <p>You have selected: {selectedAccent}</p>}
+        <button onClick={handleRecordAndAnalyze}>Record and Analyze</button>
       </CardContent>
     </Card>
   );
