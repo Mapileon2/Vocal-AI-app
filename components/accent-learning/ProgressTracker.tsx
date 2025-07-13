@@ -4,7 +4,12 @@ const ProgressTracker = () => {
   return (
     <div>
       <h2>Progress Tracker</h2>
-      <p>Progress Tracker - This section is under development.</p>
+      <p>Track your progress and unlock achievements!</p>
+      <ul>
+        <li>Phoneme Improvement Heatmap</li>
+        <li>Daily/Weekly/Monthly Performance Reports</li>
+        <li>Unlocked Levels</li>
+      </ul>
     </div>
   );
 };

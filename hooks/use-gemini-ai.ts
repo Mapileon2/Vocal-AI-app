@@ -21,8 +21,116 @@ interface GeminiResponse {
 }
 
 export function useGeminiAI() {
-  const [isGenerating, setIsGenerating] = useState(false)
-  const [error, setError] = useState<string | null>(null)
+  const [isGenerating, setIsGenerating] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const generateAccentConversion = async ({
+    text,
+    accent,
+    paragraphNumber
+  }: {
+    text: string;
+    accent: 'US' | 'UK';
+    paragraphNumber: number;
+  }) => {
+    const prompt = `
+Convert this English paragraph into structured accent training format for Indian speakers learning ${accent} accent:
+
+TEXT TO CONVERT:
+"${text}"
+
+REQUIRED FORMAT:
+1. IPA: Provide complete IPA transcription for ${accent} accent pronunciation
+2. English: Keep original text unchanged
+3. Hinglish: Create phonetic representation using Devanagari script that mimics ${accent} accent pronunciation
+
+IMPORTANT GUIDELINES:
+- Use Devanagari characters to approximate ${accent} sounds, NOT literal Hindi
+- Focus on phonetic accuracy for ${accent} accent
+- Preserve stress patterns and intonation
+- Don't translate meaning, only represent sounds
+- Use appropriate Devanagari combinations for ${accent} vowel sounds
+- Include ${accent} specific phonetic features
+
+RESPOND IN THIS EXACT FORMAT:
+IPA: [your IPA transcription]
+HINGLISH: [your Devanagari phonetic representation]
+`;
+
+    try {
+      const result = await generateText(prompt);
+      const lines = result.split('\n');
+      const ipa = lines.find( (l:string) => l.startsWith('IPA:'))?.replace('IPA:', '').trim() || '';
+      const hinglish = lines.find( (l:string) => l.startsWith('HINGLISH:'))?.replace('HINGLISH:', '').trim() || '';
+
+      return { ipa, hinglish };
+    } catch (error) {
+      throw new Error('Accent conversion failed');
+    }
+  };
+
+  const generateText = async (request: GeminiRequest): Promise<GeminiResponse | null> => {
+    setIsGenerating(true)
+    setError(null)
+
+    try {
+      const response = await fetch("/api/persona-feedback", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(request),
+      })
+
+      if (!response.ok) {
+        const errorData = await response.json()
+        setError(errorData.error || "Something went wrong.")
+        return null
+      }
+
+      const data = await response.json()
+      return {
+        text: data.text,
+        usage: data.usage,
+      }
+    } catch (err: any) {
+      setError(err.message || "Something went wrong")
+      return null
+    } finally {
+      setIsGenerating(false)
+    }
+  }
+
+  const generateVoiceAnalysisFeedback = async (analysisData: any): Promise<string | null> => {
+    setIsGenerating(true)
+    setError(null)
+
+    try {
+      const response = await fetch("/api/analyze-voice", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(analysisData),
+      })
+
+      if (!response.ok) {
+        const errorData = await response.json()
+        setError(errorData.error || "Something went wrong.")
+        return null
+      }
+
+      const data = await response.json()
+      return data.text
+    } catch (err: any) {
+      setError(err.message || "Something went wrong")
+      return null
+    } finally {
+      setIsGenerating(false)
+    }
+  }
+
+  return { generateText, generateVoiceAnalysisFeedback, isGenerating, error, generateAccentConversion };
   const { getApiKey, trackUsage, checkRateLimit } = useApiKey()
 
   const generateText = async (request: GeminiRequest): Promise<GeminiResponse | null> => {

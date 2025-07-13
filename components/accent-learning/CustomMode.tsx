@@ -4,7 +4,8 @@ const CustomMode = () => {
   return (
     <div>
       <h2>Custom Mode</h2>
-      <p>Custom Mode - This section is under development.</p>
+      <p>Upload your own voice sample and create custom lessons!</p>
+      <button>Upload Voice Sample</button>
     </div>
   );
 };

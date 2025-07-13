@@ -10,14 +10,14 @@ const accentOptions = [
   { name: "Indian Neutral", flag: "🇮🇳", audio: "" },
 ];
 
-interface Lesson {
+interface LessonType {
     lesson_id: string;
     accent_target: string;
     prompts: { type: string; text: string; audio_native: string; correct_phoneme: string; dictionary_lookup: boolean; }[];
 }
 
 interface Lessons {
-    [key: string]: Lesson[];
+    [key: string]: LessonType[];
 }
 
 const lessons: Lessons = {
@@ -34,7 +34,9 @@ const lessons: Lessons = {
 const AccentLearning = () => {
   const [selectedAccent, setSelectedAccent] = useState<string | null>(null);
     const [detectedAccent, setDetectedAccent] = useState<string | null>(null);
-    const [currentLesson, setCurrentLesson] = useState<Lesson | null>(null);
+    const [currentLesson, setCurrentLesson] = useState<LessonType | null>(null);
+    const [userXP, setUserXP] = useState(0);
+    const [streak, setStreak] = useState(0);
 
   const handleAccentClick = (accent: string) => {
     setSelectedAccent(accent);
@@ -45,17 +47,13 @@ const AccentLearning = () => {
     console.log("Recording and analyzing audio...");
     const detected = await detectAccent();
     setDetectedAccent(detected);
-    if (selectedAccent && currentLesson) {
-        const evaluation = await evaluatePronunciation(selectedAccent, currentLesson.prompts[0].text);
-        console.log("Pronunciation Evaluation:", evaluation);
-    }
-  };
 
-    const evaluatePronunciation = async (accent: string, text: string) => {
-        // TODO: Implement real-time accent evaluation logic here
-        console.log("Evaluating pronunciation...");
-        return { score: Math.random() * 100, feedback: "Good job!" };
-    }
+        if (selectedAccent && currentLesson) {
+            const evaluation = await evaluatePronunciation(selectedAccent, currentLesson.prompts[0].text);
+            console.log("Pronunciation Evaluation:", evaluation);
+            updateXP(evaluation.score);
+        }
+  };
 
     const detectAccent = async () => {
         const accents = ["North American English", "British English", "Australian English", "Indian English"];
@@ -71,6 +69,19 @@ const AccentLearning = () => {
             setCurrentLesson(lesson);
         }
     };
+
+    const evaluatePronunciation = async (accent: string, text: string) => {
+        // TODO: Implement real-time accent evaluation logic here
+        console.log("Evaluating pronunciation...");
+        return { score: Math.random() * 100, feedback: "Good job!" };
+    }
+
+    const updateXP = (score: number) => {
+        // TODO: Implement XP system and progress tracking
+        console.log("Updating XP:", score);
+        setUserXP(prevXP => prevXP + score);
+        setStreak(prevStreak => prevStreak + 1);
+    }
 
   return (
     <Card className="cursor-pointer hover:shadow-md transition-shadow border-2 hover:border-blue-200">

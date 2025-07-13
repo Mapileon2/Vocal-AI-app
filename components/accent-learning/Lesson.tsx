@@ -4,7 +4,8 @@ const Lesson = () => {
   return (
     <div>
       <h2>Lesson</h2>
-      <p>Lesson - This section is under development.</p>
+      <p>Word: schedule</p>
+      <p>Pronunciation: /skedjuːl/</p>
     </div>
   );
 };
