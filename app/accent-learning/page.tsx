@@ -8,6 +8,7 @@ import ProgressTracker from "@/components/accent-learning/ProgressTracker";
 import CustomMode from "@/components/accent-learning/CustomMode";
 import RealTimeEvaluation from "@/components/accent-learning/RealTimeEvaluation";
 import Lesson from "@/components/accent-learning/Lesson";
+import { BookUploadConverter } from "@/components/BookUploadConverter";
 
 const accentOptions = [
   { name: "American", flag: "🇺🇸", audio: "" },
@@ -102,6 +103,7 @@ export default function AccentLearningPage() {
             <CustomMode />
             <RealTimeEvaluation />
             <Lesson />
+            <BookUploadConverter />
       </div>
     </div>
   );
