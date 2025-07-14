@@ -26,20 +26,22 @@ export function BookUploadConverter() {
 
   const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
-    if (file && file.type === 'text/plain') {
+    console.log("File:", file);
+    if (file && (file.type === 'text/plain' || file.type === 'application/pdf')) {
       const reader = new FileReader();
       reader.onload = (e) => {
         const content = e.target?.result as string;
+        console.log("File content:", content);
         setFileContent(content);
         setTextInput(content);
         toast({ title: "File uploaded successfully!" });
       };
       reader.readAsText(file);
     } else {
-      toast({ 
-        title: "Invalid file type", 
-        description: "Please upload a .txt file", 
-        variant: "destructive" 
+      toast({
+        title: "Invalid file type",
+        description: "Please upload a .txt or .pdf file",
+        variant: "destructive"
       });
     }
   };
@@ -111,7 +113,7 @@ export function BookUploadConverter() {
             <div className="flex items-center gap-4">
               <input
                 type="file"
-                accept=".txt"
+                accept=".txt,.pdf"
                 onChange={handleFileUpload}
                 className="hidden"
                 id="file-upload"

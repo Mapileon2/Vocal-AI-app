@@ -1,119 +1,211 @@
 import React, { useState, useEffect } from 'react';
-import { Card, CardContent } from "@/components/ui/card";
-import { Target } from "lucide-react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Progress } from "@/components/ui/progress";
+import { Mic, Play, Upload, Target, Trophy, Clock, ChevronRight } from "lucide-react";
+import RealTimeEvaluation from './accent-learning/RealTimeEvaluation';
+import AccentScenes from './accent-learning/AccentScenes';
+import ProgressTracker from './accent-learning/ProgressTracker';
+import CustomMode from './accent-learning/CustomMode';
+import { BookUploadConverter } from '@/components/BookUploadConverter';
 
-const accentOptions = [
-  { name: "American", flag: "🇺🇸", audio: "" },
-  { name: "British RP", flag: "🇬🇧", audio: "" },
-  { name: "Australian", flag: "🇦🇺", audio: "" },
-  { name: "French-English", flag: "🇫🇷", audio: "" },
-  { name: "Indian Neutral", flag: "🇮🇳", audio: "" },
+// Enhanced scene data with phonetic challenges
+const accentScenes = [
+  {
+    id: "startup-pitch",
+    title: "Startup Pitch",
+    description: "Practice confident, fast-paced presentation speech",
+    difficulty: "Advanced",
+    phonemes: ["ɜː", "ɑː", "tʃ", "dʒ"],
+    sample: "We're disrupting the market with innovative solutions"
+  },
+  {
+    id: "romantic-monologue",
+    title: "Romantic Monologue",
+    description: "Master emotional intonation and softer sounds",
+    difficulty: "Intermediate",
+    phonemes: ["əʊ", "ɪə", "ʒ", "ɔː"],
+    sample: "I've never felt this way about anyone before"
+  },
+  {
+    id: "news-anchor",
+    title: "News Anchor Readout",
+    description: "Perfect clear, neutral pronunciation",
+    difficulty: "Beginner",
+    phonemes: ["θ", "ð", "ɒ", "ɜː"],
+    sample: "Breaking news from the nation's capital"
+  },
+  {
+    id: "call-center",
+    title: "Call Center Simulation",
+    description: "Professional, patient communication style",
+    difficulty: "Intermediate",
+    phonemes: ["eə", "ɪ", "ʌ", "æ"],
+    sample: "Thank you for calling, how may I assist you?"
+  }
 ];
-
-interface LessonType {
-    lesson_id: string;
-    accent_target: string;
-    prompts: { type: string; text: string; audio_native: string; correct_phoneme: string; dictionary_lookup: boolean; }[];
-}
-
-interface Lessons {
-    [key: string]: LessonType[];
-}
-
-const lessons: Lessons = {
-    "American": [
-        { lesson_id: "american_1", accent_target: "American", prompts: [{ type: "word", text: "schedule", audio_native: "", correct_phoneme: "/skedjuːl/", dictionary_lookup: true }] },
-        { lesson_id: "american_2", accent_target: "American", prompts: [{ type: "phrase", text: "How are you?", audio_native: "", correct_phoneme: "", dictionary_lookup: false }] },
-    ],
-    "British RP": [
-        { lesson_id: "british_1", accent_target: "British RP", prompts: [{ type: "word", text: "schedule", audio_native: "", correct_phoneme: "/\u0283\u025bdju\u02d0l/", dictionary_lookup: true }] },
-        { lesson_id: "british_2", accent_target: "British RP", prompts: [{ type: "phrase", text: "How do you do?", audio_native: "", correct_phoneme: "", dictionary_lookup: false }] },
-    ]
-};
 
 const AccentLearning = () => {
   const [selectedAccent, setSelectedAccent] = useState<string | null>(null);
-    const [detectedAccent, setDetectedAccent] = useState<string | null>(null);
-    const [currentLesson, setCurrentLesson] = useState<LessonType | null>(null);
-    const [userXP, setUserXP] = useState(0);
-    const [streak, setStreak] = useState(0);
+  const [selectedScene, setSelectedScene] = useState<string | null>(null);
+  const [currentLesson, setCurrentLesson] = useState<any>(null);
+  const [activeTab, setActiveTab] = useState("scenes");
+  const [userProgress, setUserProgress] = useState({
+    totalSessions: 0,
+    currentStreak: 0,
+    phonemeMastery: {
+      "ɜː": 75,
+      "ɑː": 60,
+      "tʃ": 85,
+      "dʒ": 70
+    }
+  });
 
-  const handleAccentClick = (accent: string) => {
-    setSelectedAccent(accent);
+  const handleStartScene = (sceneId: string) => {
+    setSelectedScene(sceneId);
+    const scene = accentScenes.find(s => s.id === sceneId);
+    if (scene) {
+      setCurrentLesson({
+        type: "scene",
+        content: scene
+      });
+    }
   };
 
-  const handleRecordAndAnalyze = async () => {
-    // TODO: Implement audio recording and analysis logic here
-    console.log("Recording and analyzing audio...");
-    const detected = await detectAccent();
-    setDetectedAccent(detected);
-
-        if (selectedAccent && currentLesson) {
-            const evaluation = await evaluatePronunciation(selectedAccent, currentLesson.prompts[0].text);
-            console.log("Pronunciation Evaluation:", evaluation);
-            updateXP(evaluation.score);
-        }
+  const handleRecordScene = async (sceneId: string) => {
+    console.log(`Recording ${sceneId}...`);
+    // Integration with RealTimeEvaluation
+    setActiveTab("realtime");
   };
-
-    const detectAccent = async () => {
-        const accents = ["North American English", "British English", "Australian English", "Indian English"];
-        const randomIndex = Math.floor(Math.random() * accents.length);
-        return accents[randomIndex];
-    }
-
-    const handleStartLesson = (lessonId: string) => {
-        // TODO: Implement lesson start logic
-        console.log("Starting lesson:", lessonId);
-        const lesson = lessons[selectedAccent!].find((lesson) => lesson.lesson_id === lessonId);
-        if (lesson) {
-            setCurrentLesson(lesson);
-        }
-    };
-
-    const evaluatePronunciation = async (accent: string, text: string) => {
-        // TODO: Implement real-time accent evaluation logic here
-        console.log("Evaluating pronunciation...");
-        return { score: Math.random() * 100, feedback: "Good job!" };
-    }
-
-    const updateXP = (score: number) => {
-        // TODO: Implement XP system and progress tracking
-        console.log("Updating XP:", score);
-        setUserXP(prevXP => prevXP + score);
-        setStreak(prevStreak => prevStreak + 1);
-    }
 
   return (
-    <Card className="cursor-pointer hover:shadow-md transition-shadow border-2 hover:border-blue-200">
-      <CardContent className="p-6 text-center">
-        <h1>Accent Learning</h1>
-        <p>Select your target accent:</p>
-        <div className="flex flex-wrap justify-center gap-4">
-          {accentOptions.map((accent) => (
-            <button key={accent.name} onClick={() => handleAccentClick(accent.name)} className="p-2 border rounded-md hover:bg-gray-100">
-              {accent.flag} {accent.name}
-            </button>
-          ))}
+    <div className="max-w-6xl mx-auto p-6 space-y-6">
+      <div className="text-center mb-8">
+        <h1 className="text-3xl font-bold mb-2">🎭 Accent Training Studio</h1>
+        <p className="text-gray-600">Master US/UK accents with interactive scenes and real-time feedback</p>
+      </div>
+
+      <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+        <TabsList className="grid grid-cols-5 w-full">
+          <TabsTrigger value="scenes">Scenes</TabsTrigger>
+          <TabsTrigger value="realtime">Live Practice</TabsTrigger>
+          <TabsTrigger value="progress">Progress</TabsTrigger>
+          <TabsTrigger value="custom">Custom Mode</TabsTrigger>
+          <TabsTrigger value="books">Book Converter</TabsTrigger>
+        </TabsList>
+
+        {/* Accent Scenes Tab */}
+        <TabsContent value="scenes" className="space-y-4">
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Target className="w-5 h-5" />
+                Accent Scenes & Challenges
+              </CardTitle>
+              <CardDescription>
+                Practice with realistic scenarios designed for accent improvement
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {accentScenes.map((scene) => (
+                  <Card key={scene.id} className="hover:shadow-lg transition-shadow">
+                    <CardContent className="p-4">
+                      <div className="flex justify-between items-start mb-3">
+                        <div>
+                          <h3 className="font-semibold">{scene.title}</h3>
+                          <p className="text-sm text-gray-600">{scene.description}</p>
+                        </div>
+                        <Badge variant={scene.difficulty === "Beginner" ? "default" : "secondary"}>
+                          {scene.difficulty}
+                        </Badge>
+                      </div>
+                      
+                      <div className="mb-3">
+                        <p className="text-xs text-gray-500 mb-2">Key phonemes:</p>
+                        <div className="flex gap-1 flex-wrap">
+                          {scene.phonemes.map(phoneme => (
+                            <Badge key={phoneme} variant="outline" className="text-xs">
+                              /{phoneme}/
+                            </Badge>
+                          ))}
+                        </div>
+                      </div>
+
+                      <div className="mb-3 p-2 bg-gray-50 rounded">
+                        <p className="text-sm italic">"{scene.sample}"</p>
+                      </div>
+
+                      <div className="flex gap-2">
+                        <Button 
+                          size="sm" 
+                          className="flex-1"
+                          onClick={() => handleStartScene(scene.id)}
+                        >
+                          <Play className="w-4 h-4 mr-1" />
+                          Start Scene
+                        </Button>
+                        <Button 
+                          size="sm" 
+                          variant="outline"
+                          onClick={() => handleRecordScene(scene.id)}
+                        >
+                          <Mic className="w-4 h-4 mr-1" />
+                          Practice
+                        </Button>
+                      </div>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        {/* Real-Time Evaluation Tab */}
+        <TabsContent value="realtime">
+          <RealTimeEvaluation 
+            selectedAccent={selectedAccent}
+            currentScene={currentLesson?.type === "scene" ? currentLesson.content : null}
+          />
+        </TabsContent>
+
+        {/* Progress Tracker Tab */}
+        <TabsContent value="progress">
+          <ProgressTracker 
+            userProgress={userProgress}
+            selectedAccent={selectedAccent}
+          />
+        </TabsContent>
+
+        {/* Custom Mode Tab */}
+        <TabsContent value="custom">
+          <CustomMode 
+            selectedAccent={selectedAccent}
+            onUploadComplete={(sample) => console.log("Custom sample uploaded:", sample)}
+          />
+        </TabsContent>
+
+        {/* Book Converter Tab */}
+        <TabsContent value="books">
+          <BookUploadConverter />
+        </TabsContent>
+      </Tabs>
+
+      {/* Floating Progress Bar */}
+      <div className="fixed bottom-4 right-4 bg-white p-4 rounded-lg shadow-lg border">
+        <div className="flex items-center gap-3">
+          <Trophy className="w-5 h-5 text-yellow-500" />
+          <div>
+            <p className="text-sm font-medium">{userProgress.currentStreak} day streak</p>
+            <Progress value={60} className="w-20 h-2" />
+          </div>
+          <ChevronRight className="w-4 h-4" />
         </div>
-        {selectedAccent && <p>You have selected: {selectedAccent}</p>}
-        <button onClick={handleRecordAndAnalyze}>Record and Analyze</button>
-            {detectedAccent && <p>Detected Accent: {detectedAccent}</p>}
-        {selectedAccent && (
-            <div>
-                <h2>Lessons</h2>
-                <ul>
-                    {lessons[selectedAccent]?.map((lesson) => (
-                        <li key={lesson.lesson_id}>
-                            <button onClick={() => handleStartLesson(lesson.lesson_id)}>
-                                {lesson.lesson_id}
-                            </button>
-                        </li>
-                    ))}
-                </ul>
-            </div>
-        )}
-      </CardContent>
-    </Card>
+      </div>
+    </div>
   );
 };
 

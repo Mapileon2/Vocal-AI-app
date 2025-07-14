@@ -83,11 +83,31 @@ export function useVoiceAnalysis() {
     setError(null)
   }
 
+  const startRecording = async () => {
+    // TODO: Implement audio recording logic here
+    console.log("Starting recording...");
+  };
+
+  const stopRecording = async () => {
+    // TODO: Implement audio recording logic here
+    console.log("Stopping recording...");
+    return { audioBlob: new Blob(), audioData: [] };
+  };
+
+  const analyzeAccent = async (audioBlob: Blob, accent: string, prompt: string) => {
+    // TODO: Implement accent analysis logic here
+    console.log("Analyzing accent...");
+    return { feedback: "Your accent is very good!" };
+  };
+
   return {
     analysisData,
     isAnalyzing,
     analyzeAudio,
     clearAnalysis,
     error,
+    startRecording,
+    stopRecording,
+    analyzeAccent,
   }
 }

@@ -189,14 +189,16 @@ IMPORTANT GUIDELINES:
 
 RESPOND IN THIS EXACT FORMAT:
 IPA: [your IPA transcription]
+---
 HINGLISH: [your Devanagari phonetic representation]
 `;
 
     try {
       const result = await generateText({prompt});
-      const lines = result?.text.split('\n');
-      const ipa = lines?.find(l => l.startsWith('IPA:'))?.replace('IPA:', '').trim() || '';
-      const hinglish = lines?.find(l => l.startsWith('HINGLISH:'))?.replace('HINGLISH:', '').trim() || '';
+      console.log("Gemini Response:", result);
+      const lines = result?.text.split('---');
+      const ipa = lines?.[0]?.replace('IPA:', '').trim() || '';
+      const hinglish = lines?.[1]?.replace('HINGLISH:', '').trim() || '';
       
       return { ipa, hinglish };
     } catch (error) {
